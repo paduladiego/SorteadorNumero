@@ -1,27 +1,81 @@
+/**
+A função exibirTextoTela exibe o conteúdo de texto especificado dentro da tag HTML especificada na tela.
+@param tagHTML - O parâmetro tagHTML é uma string que representa o seletor da tag HTML onde você
+deseja exibir o texto. Pode ser uma tag como <p>, <h1>, <div>, etc.
+@param textHTML - O parâmetro textHTML é o conteúdo de texto que você deseja exibir na
+tela dentro do elemento HTML especificado pelo parâmetro tagHTML.
+*/
+function exibirTextoTela(tagHTML, textHTML) {
+	let varCampo = document.querySelector(tagHTML);
+	varCampo.innerHTML = textHTML;
+	// responsiveVoice.speak(textHTML, "Brazilian Portuguese Female", {rate: 1.3});
+}
+
+/**
+A função limparImputs limpa os campos de entrada em uma página da web, definindo seus valores como um
+texto especificado.
+@param tagHTML - O parâmetro tagHTML na função limparImputs é usado para especificar o tipo
+de elementos de entrada HTML que você deseja direcionar para limpar seus valores. Isso poderia ser algo
+como 'input', 'textarea' ou 'select'.
+@param textHTML - O parâmetro textHTML na função limparImputs é o texto que você deseja
+definir como o valor dos elementos de entrada selecionados pelo parâmetro tagHTML.
+*/
+function limparImputs(tagHTML, textHTML) {
+	let inputReload = document.querySelectorAll(tagHTML);
+	inputReload.forEach(function (e) {
+		e.value = textHTML;
+	});
+}
+
+/**
+ * A função "sortear" gera uma quantidade especificada de números aleatórios dentro de um intervalo dado e
+ * os exibe na tela em ordem crescente.
+ */
 function sortear() {
 	let qtdNumeros = parseInt(document.getElementById('quantidade').value);
 	let numMinimo = parseInt(document.getElementById('de').value);
 	let numMaximo = parseInt(document.getElementById('ate').value);
-	let listaNumSorteado = [];
+	if (!isNaN(qtdNumeros) && !isNaN(numMinimo) && !isNaN(numMaximo)) {
+		let listaNumSorteado = [];
 
-	console.log(`quantidae ${qtdNumeros} - de ${numMinimo} ate ${numMaximo}`);
+		console.log(`quantidae ${qtdNumeros} - de ${numMinimo} ate ${numMaximo}`);
 
-	for (let i = 0; i < qtdNumeros; i++) {
-		numSorteado = gerarNumAleatorio(numMaximo, numMinimo);
+		for (let i = 0; i < qtdNumeros; i++) {
+			numSorteado = gerarNumAleatorio(numMaximo, numMinimo);
 
-		if (listaNumSorteado.includes(numSorteado)) {
-			i--;
-		} else {
-			listaNumSorteado.push(numSorteado);
+			if (listaNumSorteado.includes(numSorteado)) {
+				i--;
+			} else {
+				listaNumSorteado.push(numSorteado);
+			}
 		}
-	}
 
-	function gerarNumAleatorio(min, max) {
-		return Math.floor(Math.random() * (max - min) + min + 1);
-	}
+		function gerarNumAleatorio(min, max) {
+			return Math.floor(Math.random() * (max - min) + min + 1);
+		}
+		exibirTextoTela('#resultado .texto__paragrafo', `Números Sorteados: <br>${listaNumSorteado.sort((a, b) => a - b).join(' - ')}`);
+		console.log(listaNumSorteado);
 
-	document.querySelector('#resultado .texto__paragrafo').innerHTML = `Seus numeros sorteados foram: ${listaNumSorteado.sort((a, b) => a - b).join(' - ')}`;
-	console.log(listaNumSorteado);
+		document.getElementById('btn-sortear').setAttribute('disabled', true);
+		document.querySelector('#btn-reiniciar').disabled = false;
+	} else {
+		alert('Prencehr todos os campos antes de Sortear');
+	}
+}
+
+/**
+ * A função "reiniciar" redefine certos elementos na página da web e exibe uma mensagem indicando
+ * que nenhum número foi sorteado ainda.
+ */
+function reiniciar() {
+	document.getElementById('btn-sortear').removeAttribute('disabled');
+	document.getElementById('btn-reiniciar').setAttribute('disabled', true);
+	limparImputs('.container__input', '');
+	// let inputReload = document.querySelectorAll('.container__input');
+	// inputReload.forEach(function (input) {
+	// input.value = '';
+	// });
+	exibirTextoTela('#resultado .texto__paragrafo', 'Números sorteados:  nenhum até agora');
 }
 
 // ----------------------------
@@ -53,29 +107,34 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 });
 
-// limitador para 100 númerossorteados
-document.addEventListener('DOMContentLoaded', function () {
-	// let input2 = document.querySelector('#quantidade');
-	let input3 = document.querySelector('#quantidade');
-	let numMaximo = document.querySelector('#ate');
+// Segurança para não travar o navegador, limitar a 80% do valor de aposta
+/**
+ * A função calcula 80% da diferença entre os valores máximo e mínimo inseridos.
+ * @returns A função `calcNumLimite` retorna o resultado do cálculo `(numMaximo.value -
+ * numMinimo.value + 1) * 0.8` após aplicar a função `Math.floor` a ele.
+ */
+function calcNumLimite() {
+	return Math.floor((numMaximo.value - numMinimo.value + 1) * 0.8);
+}
 
-	// input2.addEventListener('keyup', function (event) {
-	// 	// Se o valor digitado for maior que 1 caractere, substitui por "10"
-	// 	if (input2.value.length > 2 && input2.value.length < numMaximo.value.length) {
-	// 		input2.value = '100';
-	// 	} else {
-	// 		input2.value = Math.pow(10, numMaximo.value.length - 2);
-	// 	}
-	// });
-// adiona limite na quantidade de segurança para não travar o código
-	input3.addEventListener('keyup', function (event) {
-		if
-			(input3.value < 101) {
-			input3.value = Math.floor(numMaximo.value * 0.8);
-		}else{
-			// (input3.value.length > numMaximo.value.length) {
-			input3.value = Math.pow(10, numMaximo.value.length - 1);
-			document.querySelector('#quantidade').setAttribute('max', input3.value);
-		}
-	});
-});
+/**
+ * A função `calcLimitarNumQtd` calcula e limita a quantidade de um número com base em determinadas
+ * condições.
+ */
+function calcLimitarNumQtd() {
+	limiteNumQtd = calcNumLimite();
+	if (numQtd.value > limiteNumQtd && numMaximo.value > 10) {
+		numQtd.value = limiteNumQtd;
+	} else if (numQtd.value > 10 && numMaximo.value < 11) {
+		numQtd.value = 9;
+	}
+}
+
+let numQtd = document.querySelector('#quantidade');
+let numMaximo = document.querySelector('#ate');
+let numMinimo = document.querySelector('#de');
+let limiteNumQtd = calcNumLimite();
+
+numQtd.addEventListener('input', calcLimitarNumQtd);
+numMaximo.addEventListener('input', calcLimitarNumQtd);
+numMinimo.addEventListener('input', calcLimitarNumQtd);
