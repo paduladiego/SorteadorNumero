@@ -1,7 +1,6 @@
 <table>
-<tr>
-<td>
-
+<tr> <td>
+  
 # SorteadorNumero
 Estudo de JS <br>
 Este é um simples sorteador de números desenvolvido em JavaScript para uso em páginas da web.
@@ -31,8 +30,8 @@ Este é um simples sorteador de números desenvolvido em JavaScript para uso em 
 ## Como Contribuir
 
 - Sinta-se à vontade para contribuir com melhorias ou correções neste projeto.
-</td>
-<td>
+  
+</td> <td>
 
 # Number Generator
 
@@ -64,6 +63,5 @@ This is a simple number generator developed in JavaScript for use on web pages.
 
 - Feel free to contribute to this project by suggesting improvements or corrections.
 
-</td>
-</tr>
+</td> </tr>
 </table>
